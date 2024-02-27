@@ -1,0 +1,165 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+/* Link list Node */
+struct Node
+{
+    int data;
+    struct Node* next;
+};
+
+void print(struct Node *Node)
+{
+    while (Node!=NULL)
+    {
+        cout << Node->data << " ";
+        Node = Node->next;
+    }
+}
+
+
+Node *newNode(int data)
+{
+    Node *temp = new Node;
+    temp->data = data;
+    temp->next = NULL;
+    return temp;
+}
+
+
+// } Driver Code Ends
+/*
+
+The structure of linked list is the following
+
+struct Node
+{
+    int data;
+    Node* next;
+};
+
+*/
+class Solution
+{
+    public:
+    Node* reverse(Node* head){
+        Node* prev= NULL;
+        Node* curr = head;
+        while(curr != NULL){
+            Node* forw = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forw;
+        }
+        return prev;
+    }
+     Node* solve(Node* first, Node* second){
+        if(first->next == NULL){
+            first->next = second;
+            return first;
+        }
+        Node* curr1 = first;
+        Node* next1 = curr1->next;
+        Node* curr2 = second;
+        Node * next2 = curr2->next;
+        while(next1 != NULL &&  curr2 != NULL){
+            if((curr2->data >= curr1->data) && (curr2->data <= next1->data)){
+                curr1->next = curr2;
+                next2 = curr2->next;
+                curr2->next= next1;
+                curr1 = curr2;
+                curr2 = next2;
+            }
+            else{
+                curr1 = next1;
+                next1 = next1->next;
+                if(next1 == NULL){
+                    curr1->next= curr2;
+                    return first;
+                }
+            }
+            
+        }
+        return first;
+    }
+    struct Node * mergeResult(Node *first,Node *second)
+    {
+        // your code goes here    Node* solve(Node* first, Node* second){
+        if(first == NULL){
+            return reverse(second);
+        }
+        if(second == NULL){
+            return reverse(first);
+        }
+        if(first->data <= second->data){
+          return reverse( solve(first,second));
+        }
+        else
+        {
+            return reverse(solve(second,first));
+        }
+    
+    }  
+};
+
+
+//{ Driver Code Starts.
+
+int main()
+{
+    int T;
+    cin>>T;
+    while(T--)
+    {
+        int nA;
+        cin>>nA;
+        int nB;
+        cin>>nB;
+
+        struct Node* headA=NULL;
+        struct Node* tempA = headA;
+
+        for(int i=0;i<nA;i++)
+        {
+            int ele;
+            cin>>ele;
+            if(headA==NULL)
+            {
+                headA=tempA=newNode(ele);
+
+            }else{
+                tempA->next = newNode(ele);
+				tempA=tempA->next;
+            }
+        }
+
+        struct Node* headB=NULL;
+        struct Node* tempB = headB;
+
+
+        for(int i=0;i<nB;i++)
+        {
+            int ele;
+            cin>>ele;
+            if(headB==NULL)
+            {
+                headB=tempB=newNode(ele);
+
+            }else{
+                tempB->next = newNode(ele);
+				tempB=tempB->next;
+            }
+        }
+        
+        Solution ob;
+        struct Node* result = ob.mergeResult(headA,headB);
+
+        print(result);
+        cout<<endl;
+
+
+    }
+}
+
+// } Driver Code Ends
